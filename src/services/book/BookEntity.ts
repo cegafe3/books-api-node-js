@@ -15,11 +15,13 @@ export class Book {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
+  @Column()
+  @Length(1, 255)
   @IsNotEmpty()
   title: string;
 
   @Column('text')
+  @Length(1, 10000)
   @IsNotEmpty()
   description: string;
 

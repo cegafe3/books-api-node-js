@@ -4,9 +4,11 @@ import {
   allAuthors, 
   createAuthor,
   editAuthor,
-  deleteAuthor 
+  deleteAuthor,
+  authorBooks,
+  search
 } from "./AuthorController";
-import { validate } from "class-validator";
+import { checkSearchParams } from "../../middleware/checks";
 
 const api_prefix = '/api/v1';
 
@@ -70,6 +72,31 @@ export default [
     handler: [
       async (req: Request, res: Response) => {
         const result = await deleteAuthor(req.params.author_id);
+        res.status(200).send(result);
+      }
+    ]
+  },
+  // getting the books of an author
+  {
+    path: api_prefix + "/author/books/:author_id",
+    method: "get",
+    handler: [
+      async (req: Request, res: Response) => {
+        const result = await authorBooks(
+          req.params.author_id
+        );
+        res.status(200).send(result);
+      }
+    ]
+  },
+  // search authors by title, description and author name
+  {
+    path: api_prefix + "/author/search",
+    method: "get",
+    handler: [
+      checkSearchParams,
+      async (req: Request, res: Response) => {
+        const result = await search(req.query.query);
         res.status(200).send(result);
       }
     ]

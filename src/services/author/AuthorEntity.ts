@@ -17,6 +17,7 @@ export class Author {
   id: number;
 
   @Column('text')
+  @Length(1, 255)
   @IsNotEmpty()
   name: string;
 

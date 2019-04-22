@@ -8,8 +8,9 @@ import {
   associateAuthor,
   bookAuthors,
   deleteAuthorFromBook,
+  search,
 } from "./BookController";
-import { validate } from "class-validator";
+import { checkSearchParams } from "../../middleware/checks";
 
 const api_prefix = '/api/v1';
 
@@ -106,18 +107,30 @@ export default [
       }
     ]
   },
-    // delete author from a book
-    {
-      path: api_prefix + "/book/delete-author/:book_id",
-      method: "get",
-      handler: [
-        async (req: Request, res: Response) => {
-          const result = await deleteAuthorFromBook(
-            req.params.book_id,
-            req.query.author_id,
-          );
-          res.status(200).send(result);
-        }
-      ]
-    },
+  // delete author from a book
+  {
+    path: api_prefix + "/book/delete-author/:book_id",
+    method: "delete",
+    handler: [
+      async (req: Request, res: Response) => {
+        const result = await deleteAuthorFromBook(
+          req.params.book_id,
+          req.query.author_id,
+        );
+        res.status(200).send(result);
+      }
+    ]
+  },
+  // search books by title, description and author name
+  {
+    path: api_prefix + "/book/search",
+    method: "get",
+    handler: [
+      checkSearchParams,
+      async (req: Request, res: Response) => {
+        const result = await search(req.query.query);
+        res.status(200).send(result);
+      }
+    ]
+  },
 ];
