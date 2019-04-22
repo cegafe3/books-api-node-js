@@ -1,12 +1,13 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
-import {Book} from "./services/book/BookEntity";
 import * as http from "http"
 import * as express from "express";
 import { applyMiddleware, applyRoutes } from "./utils";
 import middleware from "./middleware";
 import errorHandlers from "./middleware/errorHandlers";
 import routes from "./services";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 createConnection().then(async connection => {
   process.on("uncaughtException", e => {
